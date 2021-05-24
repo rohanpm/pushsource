@@ -9,7 +9,9 @@ from pushsource import Source, ErratumPushItem, ErratumReference
 @fixture
 def fake_errata_tool():
     controller = FakeErrataToolController()
-    with patch("pushsource._impl.backend.errata_source.ServerProxy") as mock_proxy:
+    with patch(
+        "pushsource._impl.backend.errata_source.errata_client.ServerProxy"
+    ) as mock_proxy:
         mock_proxy.side_effect = controller.proxy
         yield controller
 

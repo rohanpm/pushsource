@@ -10,6 +10,9 @@ from threading import Thread
 import koji
 from more_executors import Executors
 from more_executors.futures import f_map
+from pushsource._impl.model import container
+
+from pushsource._impl.model.container import ContainerPushItem
 
 from ..source import Source
 from ..model import RpmPushItem, ModuleMdPushItem
@@ -102,6 +105,7 @@ class KojiSource(Source):
         dest=None,
         rpm=None,
         module_build=None,
+        container_build=None,
         signing_key=None,
         basedir=None,
         threads=4,
@@ -126,6 +130,11 @@ class KojiSource(Source):
             module_build (list[str, int])
                 Build identifier(s). Can be koji IDs (integers) or build NVRs.
                 The source will yield all modulemd files belonging to these
+                build(s).
+
+            container_build (list[str, int])
+                Build identifier(s). Can be koji IDs (integers) or build NVRs.
+                The source will yield all container images produced by these
                 build(s).
 
             signing_key (list[str])
@@ -159,8 +168,15 @@ class KojiSource(Source):
                 A custom executor used to submit calls to koji.
         """
         self._url = url
+
         self._rpm = [try_int(x) for x in list_argument(rpm)]
         self._module_build = [try_int(x) for x in list_argument(module_build)]
+        self._container_build = [try_int(x) for x in list_argument(container_build)]
+        # dedupe all of the above
+        self._rpm = list(set(self._rpm))
+        self._module_build = list(set(self._module_build))
+        self._container_build = list(set(self._container_build))
+
         self._signing_key = list_argument(signing_key)
         self._dest = list_argument(dest)
         self._timeout = timeout
@@ -273,6 +289,40 @@ class KojiSource(Source):
             )
         return out
 
+    def _push_items_from_container_build(self, nvr, meta):
+        LOG.debug("Looking for container images on %s, %s", nvr, meta)
+
+        if not meta:
+            message = "Container build not found in koji: %s" % nvr
+            LOG.error(message)
+            raise ValueError(message)
+
+        # The metadata we are interested in is documented here:
+        # https://github.com/containerbuildsystem/atomic-reactor/blob/061d92e63cf27ae030e8ceed388ec34f51afb17b/docs/koji.md#type-specific-metadata
+        extra = meta.get("extra") or {}
+        typeinfo = extra.get("typeinfo") or {}
+        # Per above doc, it is preferred to use the metadata under 'typeinfo' if present
+        image = typeinfo.get("image") or extra.get("image")
+
+        if not image:
+            message = "Build %s not recognized as a container build" % nvr
+            LOG.error(message)
+            raise ValueError(message)
+
+        out = []
+
+        out.append(
+            ContainerPushItem(
+                # WIP: is this the right name?
+                name=nvr,
+                dest=self._dest,
+                build=nvr,
+                WIP_image_raw=image,
+            )
+        )
+
+        return out
+
     def _rpm_futures(self):
         # Get info from each requested RPM.
         rpm_fs = [(self._executor.submit(self._get_rpm, rpm), rpm) for rpm in self._rpm]
@@ -293,6 +343,19 @@ class KojiSource(Source):
         return [
             f_map(f, partial(self._push_items_from_module_build, build))
             for f, build in module_build_fs
+        ]
+
+    def _container_futures(self):
+        # Get info from each requested container build.
+        build_fs = [
+            (self._executor.submit(self._get_build, build), build)
+            for build in self._container_build
+        ]
+
+        # Convert them to lists of push items
+        return [
+            f_map(f, partial(self._push_items_from_container_build, build))
+            for f, build in build_fs
         ]
 
     def _do_fetch(self, koji_queue, exceptions):
@@ -352,6 +415,10 @@ class KojiSource(Source):
         for build_id in self._module_build:
             koji_queue.put(GetBuildCommand(ident=build_id, list_archives=True))
 
+        # We'll need to obtain all container image builds (TODO: archives?)
+        for build_id in self._container_build:
+            koji_queue.put(GetBuildCommand(ident=build_id))
+
         # Put some threads to work on the queue.
         fetch_exceptions = []
         fetch_threads = [
@@ -377,7 +444,9 @@ class KojiSource(Source):
         # The queue must be empty now
         assert koji_queue.empty()
 
-        push_items_fs = self._modulemd_futures() + self._rpm_futures()
+        push_items_fs = (
+            self._modulemd_futures() + self._rpm_futures() + self._container_futures()
+        )
 
         completed_fs = futures.as_completed(push_items_fs, timeout=self._timeout)
         for f in completed_fs:
