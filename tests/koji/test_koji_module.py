@@ -1,4 +1,6 @@
 import os
+import shutil
+import textwrap
 
 from pytest import raises, fixture
 from mock import patch
@@ -6,6 +8,9 @@ from mock import patch
 from pushsource import Source, ModuleMdPushItem
 
 from .fake_koji import FakeKojiController
+
+
+DATA_DIR = os.path.join(os.path.dirname(__file__), "data")
 
 
 def test_koji_modules(fake_koji, koji_dir):
@@ -20,6 +25,13 @@ def test_koji_modules(fake_koji, koji_dir):
         ["modulemd.x86_64.txt", "modulemd.s390x.txt"], build_nvr="foo-1.0-1"
     )
 
+    # Set up an existing modulemd file for one of the items and not the other.
+    modulemd_path = os.path.join(
+        koji_dir, "packages/foo/1.0/1/files/module/modulemd.x86_64.txt"
+    )
+    os.makedirs(os.path.dirname(modulemd_path))
+    shutil.copy(os.path.join(DATA_DIR, "modulemd-varnish-x86_64.yaml"), modulemd_path)
+
     # Eagerly fetch
     items = list(source)
 
@@ -29,6 +41,8 @@ def test_koji_modules(fake_koji, koji_dir):
     items = sorted(items, key=lambda pi: pi.name)
 
     assert items[0] == ModuleMdPushItem(
+        # For this module, the file didn't exist and we used the filename as module name
+        # since metadata is unavailable.
         name="modulemd.s390x.txt",
         state="PENDING",
         src=os.path.join(
@@ -43,7 +57,9 @@ def test_koji_modules(fake_koji, koji_dir):
     )
 
     assert items[1] == ModuleMdPushItem(
-        name="modulemd.x86_64.txt",
+        # For this module, the file existed and was parseable, so we use the
+        # proper NSVCA as the push item name.
+        name="varnish:6.0:3220200215073318:43bbeeef:x86_64",
         state="PENDING",
         src=os.path.join(
             koji_dir, "packages/foo/1.0/1/files/module/modulemd.x86_64.txt"
@@ -55,6 +71,37 @@ def test_koji_modules(fake_koji, koji_dir):
         build="foo-1.0-1",
         signing_key=None,
     )
+
+
+def test_koji_bad_modulemd(fake_koji, koji_dir, caplog):
+    """Koji source logs and raises exception on unparseable modulemd file"""
+
+    source = Source.get(
+        "koji:https://koji.example.com/?module_build=foo-1.0-1", basedir=koji_dir
+    )
+
+    fake_koji.insert_rpms(["foo-1.0-1.x86_64.rpm"], build_nvr="foo-1.0-1")
+    fake_koji.insert_modules(
+        ["modulemd.x86_64.txt", "modulemd.s390x.txt"], build_nvr="foo-1.0-1"
+    )
+
+    # Write invalid modulemd here.
+    modulemd_path = os.path.join(
+        koji_dir, "packages/foo/1.0/1/files/module/modulemd.x86_64.txt"
+    )
+    os.makedirs(os.path.dirname(modulemd_path))
+    with open(modulemd_path, "wt") as f:
+        f.write("This ain't no valid modulemd")
+
+    # Trying to fetch the items should fail
+    with raises(Exception):
+        list(source)
+
+    # And it should have told us exactly which file in which build couldn't be parsed
+    expected_message = (
+        "In koji build foo-1.0-1, cannot load module metadata from " + modulemd_path
+    )
+    assert expected_message in caplog.messages
 
 
 def test_koji_modules_filter_filename(fake_koji, koji_dir):
