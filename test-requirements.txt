@@ -150,9 +150,9 @@ mock==4.0.3 \
 monotonic==1.6 \
     --hash=sha256:68687e19a14f11f26d140dd5c86f3dba4bf5df58003000ed467e0e2a69bca96c
     # via more-executors
-more-executors==2.5.1 \
-    --hash=sha256:1127fe5a8aafb92175f75c014b00a93c18aeb5e96e658617e0267372ea20773f \
-    --hash=sha256:fa55e9ad51ae885139a8d09c4eb7be209bd1136dc31ae7cbf2b76e117bd3c038
+more-executors==2.6.0 \
+    --hash=sha256:2781b89ec0066e656ac938a5aa8e5925825c78168ac4281d89f33cb98d68a0b9 \
+    --hash=sha256:96bfda4177d69698dfa468660ab2b506417fb76b8c0f84c4f55f26cb6b92778e
     # via
     #   -r test-requirements.in
     #   pushcollector
