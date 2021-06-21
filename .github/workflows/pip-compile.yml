@@ -50,4 +50,4 @@ jobs:
        with:
          github-token: ${{ secrets.APPROVAL_TOKEN }}
          number: ${{ steps.find-pull-request.outputs.number }}
-       if: ${{ steps.find-pull-request.outputs.number }} && ${{ secrets.APPROVAL_TOKEN }}
+       if: ${{ steps.find-pull-request.outputs.number }}
