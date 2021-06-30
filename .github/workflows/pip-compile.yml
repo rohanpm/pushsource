@@ -50,4 +50,6 @@ jobs:
        with:
          github-token: ${{ secrets.APPROVAL_TOKEN }}
          number: ${{ steps.find-pull-request.outputs.number }}
+       # allow errors because token may be unset.
+       continue-on-error: true
        if: ${{ steps.find-pull-request.outputs.number }}
