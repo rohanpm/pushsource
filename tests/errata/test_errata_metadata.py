@@ -1,9 +1,9 @@
-from pytest import raises, fixture
 from mock import patch
+from pytest import fixture, raises
+
+from pushsource import ErratumPushItem, ErratumReference, Source
 
 from .fake_errata_tool import FakeErrataToolController
-
-from pushsource import Source, ErratumPushItem, ErratumReference
 
 
 @fixture

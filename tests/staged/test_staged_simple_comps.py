@@ -1,7 +1,6 @@
 import os
 
-from pushsource import Source, CompsXmlPushItem
-
+from pushsource import CompsXmlPushItem, Source
 
 DATADIR = os.path.join(os.path.dirname(__file__), "data")
 

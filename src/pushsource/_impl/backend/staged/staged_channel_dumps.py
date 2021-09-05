@@ -1,9 +1,8 @@
 import logging
 import os
 
-from .staged_base import StagedBaseMixin, handles_type
-
 from ...model import ChannelDumpPushItem
+from .staged_base import StagedBaseMixin, handles_type
 
 LOG = logging.getLogger("pushsource")
 

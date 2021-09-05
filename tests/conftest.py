@@ -1,4 +1,5 @@
 import copy
+
 from pytest import fixture
 
 from pushsource import Source

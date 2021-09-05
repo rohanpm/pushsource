@@ -1,15 +1,14 @@
 # Converters and validators for use with model classes.
 import datetime
 import logging
-from functools import partial
 import re
+from functools import partial
 
 import six
-from frozenlist2 import frozenlist
 from dateutil import tz
+from frozenlist2 import frozenlist
 
 from .. import compat_attr as attr
-
 
 LOG = logging.getLogger("pushsource")
 HEX_PATTERN = re.compile(r"^[0-9a-f]+$")

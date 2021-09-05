@@ -1,3 +1,3 @@
-from .source import Source, SourceUrlError
 from .backend import ErrataSource
-from .model import PushItem, ErratumPushItem
+from .model import ErratumPushItem, PushItem
+from .source import Source, SourceUrlError

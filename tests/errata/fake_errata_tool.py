@@ -1,8 +1,7 @@
 import os
+
 import yaml
-
 from six.moves.xmlrpc_client import Fault
-
 
 DATADIR = os.path.join(os.path.dirname(__file__), "data")
 

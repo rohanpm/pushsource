@@ -1,5 +1,5 @@
-import inspect
 import functools
+import inspect
 
 from six.moves.urllib import parse
 

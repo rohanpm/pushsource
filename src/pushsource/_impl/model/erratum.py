@@ -1,17 +1,9 @@
 from frozenlist2 import frozenlist
 
-from .base import PushItem
 from .. import compat_attr as attr
-from .conv import (
-    int2str,
-    md5str,
-    sha1str,
-    sha256str,
-    instance_of,
-    instance_of_str,
-    optional,
-    optional_str,
-)
+from .base import PushItem
+from .conv import (instance_of, instance_of_str, int2str, md5str, optional,
+                   optional_str, sha1str, sha256str)
 
 
 @attr.s()

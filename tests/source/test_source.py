@@ -1,5 +1,6 @@
 import copy
-from pytest import raises, fixture
+
+from pytest import fixture, raises
 
 from pushsource import Source, SourceUrlError
 

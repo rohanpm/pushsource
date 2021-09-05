@@ -1,13 +1,7 @@
 import os
 
-from pushsource import (
-    Source,
-    ErratumPushItem,
-    ErratumReference,
-    ErratumPackage,
-    ErratumPackageCollection,
-)
-
+from pushsource import (ErratumPackage, ErratumPackageCollection,
+                        ErratumPushItem, ErratumReference, Source)
 
 DATADIR = os.path.join(os.path.dirname(__file__), "data")
 

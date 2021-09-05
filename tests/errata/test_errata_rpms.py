@@ -1,18 +1,13 @@
 import os
-from pytest import raises, fixture
+
 from mock import patch
+from pytest import fixture, raises
 
-from .fake_errata_tool import FakeErrataToolController
+from pushsource import (ErratumPackage, ErratumPackageCollection,
+                        ErratumPushItem, ErratumReference, RpmPushItem, Source)
+
 from ..koji.fake_koji import FakeKojiController
-
-from pushsource import (
-    Source,
-    ErratumPushItem,
-    ErratumPackage,
-    ErratumPackageCollection,
-    ErratumReference,
-    RpmPushItem,
-)
+from .fake_errata_tool import FakeErrataToolController
 
 
 @fixture
