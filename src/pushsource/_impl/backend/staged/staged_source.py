@@ -1,32 +1,29 @@
+import functools
+import itertools
+import json
+import logging
 import os
 import threading
-import logging
-import itertools
-import functools
-
 from concurrent import futures
 
 import yaml
-import json
+from more_executors import Executors
+from pushcollector import Collector
 
 from pushsource._impl.compat import scandir
 
-from pushcollector import Collector
-from more_executors import Executors
-
-from ...source import Source
 from ...helpers import list_argument
-
-from .staged_utils import StagingMetadata, StagingLeafDir
+from ...source import Source
 from .staged_ami import StagedAmiMixin
-from .staged_files import StagedFilesMixin
-from .staged_errata import StagedErrataMixin
 from .staged_channel_dumps import StagedChannelDumpsMixin
 from .staged_compsxml import StagedCompsXmlMixin
+from .staged_errata import StagedErrataMixin
+from .staged_files import StagedFilesMixin
 from .staged_modulemd import StagedModuleMdMixin
 from .staged_productid import StagedProductIdMixin
 from .staged_rpm import StagedRpmMixin
 from .staged_unsupported import StagedUnsupportedMixin
+from .staged_utils import StagingLeafDir, StagingMetadata
 
 LOG = logging.getLogger("pushsource")
 METADATA_FILES = ["staged.yaml", "staged.yml", "staged.json", "pub-mapfile.json"]

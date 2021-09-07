@@ -1,7 +1,6 @@
 import os
 
-from pushsource import Source, AmiPushItem, AmiRelease
-
+from pushsource import AmiPushItem, AmiRelease, Source
 
 DATADIR = os.path.join(os.path.dirname(__file__), "data")
 

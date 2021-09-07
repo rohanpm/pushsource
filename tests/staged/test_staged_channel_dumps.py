@@ -1,11 +1,10 @@
-from pytest import raises
-
-import os
 import datetime
+import os
 
 from dateutil import tz
-from pushsource import Source, FilePushItem, ChannelDumpPushItem
+from pytest import raises
 
+from pushsource import ChannelDumpPushItem, FilePushItem, Source
 
 DATADIR = os.path.join(os.path.dirname(__file__), "data")
 

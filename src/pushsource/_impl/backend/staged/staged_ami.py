@@ -1,7 +1,7 @@
-import os
 import logging
+import os
 
-from ...model import AmiRelease, AmiPushItem
+from ...model import AmiPushItem, AmiRelease
 from .staged_base import StagedBaseMixin, handles_type
 
 LOG = logging.getLogger("pushsource")

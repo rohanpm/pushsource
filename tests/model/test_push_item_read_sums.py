@@ -1,7 +1,7 @@
 import hashlib
 
-from pytest import raises
 from mock import patch
+from pytest import raises
 
 from pushsource import PushItem
 

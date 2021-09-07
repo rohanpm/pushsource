@@ -1,19 +1,18 @@
+import logging
 import os
 import threading
-import logging
-from functools import partial
-
 from concurrent import futures
-from six.moves.queue import Queue, Empty
+from functools import partial
 from threading import Thread
 
 import koji
 from more_executors import Executors
 from more_executors.futures import f_map
+from six.moves.queue import Empty, Queue
 
-from ..source import Source
-from ..model import RpmPushItem, ModuleMdPushItem
 from ..helpers import list_argument, try_int
+from ..model import ModuleMdPushItem, RpmPushItem
+from ..source import Source
 
 LOG = logging.getLogger("pushsource")
 CACHE_LOCK = threading.RLock()

@@ -1,7 +1,6 @@
 import os
 
-from pushsource import Source, ProductIdPushItem
-
+from pushsource import ProductIdPushItem, Source
 
 DATADIR = os.path.join(os.path.dirname(__file__), "data")
 

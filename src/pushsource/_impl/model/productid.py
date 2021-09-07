@@ -1,5 +1,5 @@
-from .base import PushItem
 from .. import compat_attr as attr
+from .base import PushItem
 
 
 @attr.s()

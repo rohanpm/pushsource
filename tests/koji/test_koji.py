@@ -1,9 +1,9 @@
 import os
 
-from pytest import raises, fixture
 from mock import patch
+from pytest import fixture, raises
 
-from pushsource import Source, RpmPushItem
+from pushsource import RpmPushItem, Source
 
 from .fake_koji import FakeKojiController
 

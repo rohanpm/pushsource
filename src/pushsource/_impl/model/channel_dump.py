@@ -1,9 +1,11 @@
 import datetime
-from frozenlist2 import frozenlist
-from .file import FilePushItem
-from .. import compat_attr as attr
 
-from .conv import sloppyintlist, sloppylist, timestamp, optional_str, instance_of
+from frozenlist2 import frozenlist
+
+from .. import compat_attr as attr
+from .conv import (instance_of, optional_str, sloppyintlist, sloppylist,
+                   timestamp)
+from .file import FilePushItem
 
 
 @attr.s()

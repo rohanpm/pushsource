@@ -1,12 +1,12 @@
 import hashlib
-import os
 import logging
+import os
 
 from frozenlist2 import frozenlist
 
 from .. import compat_attr as attr
-from .conv import md5str, sha256str, upper_if_str, instance_of_str, optional_str
-
+from .conv import (instance_of_str, md5str, optional_str, sha256str,
+                   upper_if_str)
 
 LOG = logging.getLogger("pushsource")
 CHUNKSIZE = int(os.environ.get("PUSHSOURCE_CHUNKSIZE") or 1024 * 1024 * 16)

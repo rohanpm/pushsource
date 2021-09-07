@@ -1,18 +1,18 @@
+import logging
 import os
 import threading
-import logging
 from concurrent import futures
 
 import six
-from six.moves.urllib import parse
-from six.moves.xmlrpc_client import ServerProxy
 from more_executors import Executors
 from more_executors.futures import f_map, f_zip
+from six.moves.urllib import parse
+from six.moves.xmlrpc_client import ServerProxy
 
 from .. import compat_attr as attr
-from ..source import Source
-from ..model import ErratumPushItem
 from ..helpers import list_argument
+from ..model import ErratumPushItem
+from ..source import Source
 
 LOG = logging.getLogger("pushsource")
 

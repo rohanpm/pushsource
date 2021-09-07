@@ -1,12 +1,13 @@
-import logging
 import json
-import yaml
-import jsonschema
+import logging
 
-from .staged_base import StagedBaseMixin, handles_type
+import jsonschema
+import yaml
+
 from ... import compat_attr as attr
 from ...model import ErratumPushItem
 from ...schema import get_schema
+from .staged_base import StagedBaseMixin, handles_type
 
 LOG = logging.getLogger("pushsource")
 ERRATA_SCHEMA = get_schema("errata")

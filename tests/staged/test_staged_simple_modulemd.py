@@ -1,7 +1,6 @@
 import os
 
-from pushsource import Source, ModuleMdPushItem
-
+from pushsource import ModuleMdPushItem, Source
 
 DATADIR = os.path.join(os.path.dirname(__file__), "data")
 

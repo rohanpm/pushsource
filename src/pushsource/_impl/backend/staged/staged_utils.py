@@ -1,7 +1,7 @@
 import jsonschema
 
-from ...schema import get_schema
 from ... import compat_attr as attr
+from ...schema import get_schema
 
 REQUIRED_VERSION = "0.2"
 STAGED_SCHEMA = get_schema("staged")

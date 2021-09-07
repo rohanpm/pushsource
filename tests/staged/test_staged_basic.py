@@ -1,10 +1,9 @@
 import os
 
-from pytest import raises
 from jsonschema import ValidationError
+from pytest import raises
 
 from pushsource import Source
-
 
 DATADIR = os.path.join(os.path.dirname(__file__), "data")
 

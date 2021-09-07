@@ -1,8 +1,8 @@
 import datetime
 
-from .base import PushItem
 from .. import compat_attr as attr
-from .conv import datestr, instance_of_str, instance_of, optional_str, optional
+from .base import PushItem
+from .conv import datestr, instance_of, instance_of_str, optional, optional_str
 
 
 @attr.s()
