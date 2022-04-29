@@ -44,3 +44,11 @@ def test_staged_simple_rpm(caplog):
     nonrpm_path = os.path.join(staged_dir, "dest1/RPMS/not-an-rpm.txt")
     msg = "Unexpected non-RPM %s (ignored)" % nonrpm_path
     assert msg in caplog.messages
+
+    # Some of the fields should be not only equal, but identical,
+    # avoiding unnecessary copies.
+    item0 = files[0]
+    item1 = files[1]
+    assert item0.state is item1.state
+    assert item0.origin is item1.origin
+    assert item0.dest is item1.dest

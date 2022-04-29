@@ -6,7 +6,7 @@ from frozenlist2 import frozenlist
 from .base import PushItem
 from .. import compat_attr as attr
 from ..compat import frozendict
-from .conv import instance_of, optional_str
+from .conv import frozenlist_shared, instance_of, optional_str
 
 
 MEDIA_TYPE_ORDER = {
@@ -81,7 +81,7 @@ class ContainerImageTagPullSpec(ContainerImagePullSpec):
     """
 
     media_types = attr.ib(
-        type=list, default=attr.Factory(frozenlist), converter=frozenlist
+        type=list, default=attr.Factory(frozenlist), converter=frozenlist_shared
     )
     """Media type(s) expected to be reachable via this tag, or empty
     if unknown.
@@ -199,7 +199,7 @@ class ContainerImagePullInfo(object):
     :type: List[ContainerImageDigestPullSpec]
     """
 
-    media_types = attr.ib(type=list, converter=frozenlist)
+    media_types = attr.ib(type=list, converter=frozenlist_shared)
     """All media types for which a manifest is reachable in :meth:`digest_specs`.
 
     For information on these types see the `image manifest spec`_.
@@ -263,7 +263,7 @@ class ContainerImagePushItem(PushItem):
     """
 
     source_tags = attr.ib(
-        type=list, default=attr.Factory(frozenlist), converter=frozenlist
+        type=list, default=attr.Factory(frozenlist), converter=frozenlist_shared
     )
     """Tags placed onto this image when it was built, if known.
 

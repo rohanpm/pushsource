@@ -211,7 +211,8 @@ def test_errata_rpms_via_koji(fake_errata_tool, fake_koji, koji_dir):
     assert set(errata_item.dest) == set(rpm_dests)
 
     # It should have found the RPMs referenced by the advisory
-    assert sorted(rpm_items, key=lambda rpm: rpm.src) == [
+    sorted_items = sorted(rpm_items, key=lambda rpm: rpm.src)
+    assert sorted_items == [
         RpmPushItem(
             name="sudo-1.8.25p1-4.el8_0.3.ppc64le.rpm",
             state="PENDING",
@@ -321,3 +322,12 @@ def test_errata_rpms_via_koji(fake_errata_tool, fake_koji, koji_dir):
             signing_key="fd431d51",
         ),
     ]
+
+    # Some of the fields should be not only equal, but identical,
+    # avoiding unnecessary copies.
+    item1 = sorted_items[1]
+    item2 = sorted_items[2]
+    assert item1.state is item2.state
+    assert item1.origin is item2.origin
+    assert item1.dest is item2.dest
+    assert item1.signing_key is item2.signing_key

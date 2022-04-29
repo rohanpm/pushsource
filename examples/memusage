@@ -1,0 +1,45 @@
+#!/usr/bin/env python3
+from pushsource import Source
+
+import sys
+import resource
+
+# Exit once we've used this much memory.
+THRESHOLD = 5 * 1024 * 1024
+
+# Log mem usage per this many items.
+ITEM_COUNT = 100
+
+
+def maxrss() -> int:
+    return resource.getrusage(resource.RUSAGE_SELF).ru_maxrss
+
+
+def report(itemcount):
+    rss = maxrss()
+
+    print("maxrss\titems\tkb/item")
+    print("%s\t%s\t%0.2f" % rss, itemcount, float(rss) / float(itemcount))
+
+    if rss > THRESHOLD:
+        print("Exiting after hitting mem limit")
+        sys.exit(0)
+
+
+def main():
+    all_items = []
+    url = sys.argv[1]
+
+    with Source.get(url) as src:
+        print("Loading items from %s" % url)
+        for item in src:
+            all_items.append(item)
+            sys.stderr.write(".")
+            sys.stderr.flush()
+            if len(all_items) % ITEM_COUNT == 0:
+                sys.stderr.write("\n\n")
+                report(len(all_items))
+
+
+if __name__ == "__main__":
+    main()

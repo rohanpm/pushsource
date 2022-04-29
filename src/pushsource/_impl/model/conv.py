@@ -113,7 +113,15 @@ def archstr(value):
 
 def upper_if_str(value):
     if isinstance(value, six.string_types):
-        return value.upper()
+        out = value.upper()
+        if out == value:
+            # This might seem redundant, but the point is to
+            # avoid creating a new copy of the string when unnecessary.
+            # If upper() didn't make any difference, we return the
+            # original value since it might be a sys.intern()'ed string
+            # and we don't want to undo the caching.
+            return value
+        return out
     return value
 
 
@@ -139,6 +147,13 @@ def convert_maybe(fn):
         return fn(value)
 
     return out
+
+
+def frozenlist_shared(x):
+    # Converts x to a frozenlist, but only if it is not already.
+    if isinstance(x, frozenlist):
+        return x
+    return frozenlist(x)
 
 
 in_ = attr.validators.in_

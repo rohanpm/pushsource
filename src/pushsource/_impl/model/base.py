@@ -6,6 +6,7 @@ from frozenlist2 import frozenlist
 
 from .. import compat_attr as attr
 from .conv import (
+    frozenlist_shared,
     md5str,
     sha256str,
     upper_if_str,
@@ -94,7 +95,9 @@ class PushItem(object):
     If the push item does not represent a file, this will generally be omitted.
     """
 
-    dest = attr.ib(type=list, default=attr.Factory(frozenlist), converter=frozenlist)
+    dest = attr.ib(
+        type=list, default=attr.Factory(frozenlist), converter=frozenlist_shared
+    )
     """Destination of this push item.
 
     The meaning of "dest" differs depending on the source used and its configuration.

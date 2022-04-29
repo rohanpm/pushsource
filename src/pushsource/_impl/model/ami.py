@@ -4,7 +4,14 @@ from frozenlist2 import frozenlist
 
 from .base import PushItem
 from .. import compat_attr as attr
-from .conv import datestr, instance_of_str, instance_of, optional_str, optional
+from .conv import (
+    datestr,
+    instance_of_str,
+    instance_of,
+    optional_str,
+    optional,
+    frozenlist_shared,
+)
 
 
 @attr.s()
@@ -50,7 +57,9 @@ class AmiBillingCodes(object):
     name = attr.ib(type=str, default=None, validator=instance_of_str)
     """Billing codes name, for example Hourly2, arbitrary string for making image name unique."""
 
-    codes = attr.ib(type=list, default=attr.Factory(frozenlist), converter=frozenlist)
+    codes = attr.ib(
+        type=list, default=attr.Factory(frozenlist), converter=frozenlist_shared
+    )
     """List of billing codes, for example ['bp-1234abcd', 'bp-5678efgh'].
 
     :type: list[str]

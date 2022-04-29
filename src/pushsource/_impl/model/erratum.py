@@ -3,6 +3,7 @@ from frozenlist2 import frozenlist
 from .base import PushItem
 from .. import compat_attr as attr
 from .conv import (
+    frozenlist_shared,
     in_,
     int2str,
     md5str,
@@ -140,7 +141,7 @@ class ErratumPackageCollection(object):
     """
 
     packages = attr.ib(
-        type=list, default=attr.Factory(frozenlist), converter=frozenlist
+        type=list, default=attr.Factory(frozenlist), converter=frozenlist_shared
     )
     """List of packages within this collection.
 
@@ -252,14 +253,16 @@ class ErratumPushItem(PushItem):
     """
 
     references = attr.ib(
-        type=list, default=attr.Factory(frozenlist), converter=frozenlist
+        type=list, default=attr.Factory(frozenlist), converter=frozenlist_shared
     )
     """A list of references associated with the advisory.
 
     :type: list[ErratumReference]
     """
 
-    pkglist = attr.ib(type=list, default=attr.Factory(frozenlist), converter=frozenlist)
+    pkglist = attr.ib(
+        type=list, default=attr.Factory(frozenlist), converter=frozenlist_shared
+    )
     """A list of package collections associated with the advisory.
 
     :type: list[ErratumPackageCollection]
@@ -313,7 +316,7 @@ class ErratumPushItem(PushItem):
     """Text explaining how to apply the advisory."""
 
     content_types = attr.ib(
-        type=list, default=attr.Factory(frozenlist), converter=frozenlist
+        type=list, default=attr.Factory(frozenlist), converter=frozenlist_shared
     )
     """A list of content types associated with the advisory.
 

@@ -8,6 +8,8 @@ from more_executors import Executors
 
 from .errata_client import ErrataClient
 
+from ..cache import AttrCacher
+
 from ... import compat_attr as attr
 from ...source import Source
 from ...model import (
@@ -80,6 +82,8 @@ class ErrataSource(Source):
         self._url = force_https(url)
         self._errata = list_argument(errata)
         self._client = ErrataClient(threads=threads, url=self._errata_service_url)
+
+        self._cache = AttrCacher()
 
         self._rpm_filter_arch = list_argument(rpm_filter_arch, retain_none=True)
 
@@ -533,7 +537,7 @@ class ErrataSource(Source):
         )
         for f in completed_fs:
             for pushitem in f.result():
-                yield pushitem
+                yield self._cache.with_cached_fields(pushitem)
 
 
 Source.register_backend("errata", ErrataSource)
