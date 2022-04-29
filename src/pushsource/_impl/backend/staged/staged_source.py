@@ -16,8 +16,6 @@ from ...source import Source
 from ...model import DirectoryPushItem
 from ...helpers import list_argument, as_completed_with_timeout_reset
 
-from ..cache import AttrCacher
-
 from .staged_utils import StagingMetadata, StagingLeafDir
 from .staged_ami import StagedAmiMixin
 from .staged_files import StagedFilesMixin
@@ -73,7 +71,6 @@ class StagedSource(
         self._url = list_argument(url)
         self._threads = threads
         self._timeout = timeout
-        self._cache = AttrCacher()
 
         # Note: this executor does not have a retry.
         # NFS already does a lot of its own retries.
@@ -177,7 +174,7 @@ class StagedSource(
         )
         for f in completed_fs:
             for pushitem in f.result():
-                yield self._cache.with_cached_fields(pushitem)
+                yield pushitem
 
 
 Source.register_backend("staged", StagedSource)

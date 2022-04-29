@@ -5,6 +5,7 @@ import logging
 from frozenlist2 import frozenlist
 
 from .. import compat_attr as attr
+from .cache import SingleValueCacher
 from .conv import (
     frozenlist_shared,
     md5str,
@@ -96,7 +97,9 @@ class PushItem(object):
     """
 
     dest = attr.ib(
-        type=list, default=attr.Factory(frozenlist), converter=frozenlist_shared
+        type=list,
+        default=attr.Factory(frozenlist),
+        converter=SingleValueCacher(frozenlist, frozenlist),
     )
     """Destination of this push item.
 
@@ -126,7 +129,9 @@ class PushItem(object):
         :meth:`with_checksums`
     """
 
-    origin = attr.ib(type=str, default=None, validator=optional_str)
+    origin = attr.ib(
+        type=str, default=None, validator=optional_str, converter=SingleValueCacher(str)
+    )
     """A string representing the origin of this push item.
 
     The "origin" field is expected to record some info on how this push item
@@ -152,7 +157,10 @@ class PushItem(object):
         return KojiBuildInfo._from_nvr(self.build)
 
     signing_key = attr.ib(
-        type=str, default=None, validator=optional_str, converter=upper_if_str
+        type=str,
+        default=None,
+        validator=optional_str,
+        converter=SingleValueCacher(str, upper_if_str),
     )
     """If this push item was GPG signed, this should be an identifier for the
     signing key used.
