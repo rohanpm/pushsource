@@ -270,9 +270,9 @@ jsonschema-specifications==2023.12.1 \
     --hash=sha256:48a76787b3e70f5ed53f1160d2b81f586e4ca6d1548c5de7085d1682674764cc \
     --hash=sha256:87e4fdf3a94858b8a2ba2778d9ba57d8a9cafca7c7489c46ba0d30a8bc6a9c3c
     # via jsonschema
-kobo==0.36.0 \
-    --hash=sha256:bee50de7b683472e7cfb1e54def79243cec5cc72f80966596619473a1b1bf901 \
-    --hash=sha256:c23458f5dd9b46cdac4b5d21b9a469ae188681608d12572a37ab8a11eeb7df44
+kobo==0.36.1 \
+    --hash=sha256:3785916d4c6fd210a976c25a9e8beed07f1a3e42fb7769e824524ab47acee4b4 \
+    --hash=sha256:6ffd13e1dedb3ddc42d69eae86c0447150447ab2d5f0464fe2f7fac5ee71419e
     # via -r test-requirements.in
 koji==1.34.0 \
     --hash=sha256:2067a72109b2a936b0a22cdf3a7a54f743da77904e353a34af2ad2b3dd5c148b \
@@ -533,9 +533,9 @@ tomli==2.0.1 \
     # via
     #   black
     #   pytest
-typing-extensions==4.10.0 \
-    --hash=sha256:69b1a937c3a517342112fb4c6df7e72fc39a38e7891a5730ed4985b5214b5475 \
-    --hash=sha256:b0abd7c89e8fb96f98db18d86106ff1d90ab692004eb746cf6eda2682f91b3cb
+typing-extensions==4.11.0 \
+    --hash=sha256:83f085bd5ca59c80295fc2a82ab5dac679cbe02b9f33f7d83af68e241bea51b0 \
+    --hash=sha256:c1f94d72897edaf4ce775bb7558d5b79d8126906a14ea5ed1635921406c0387a
     # via black
 urllib3==2.2.1 \
     --hash=sha256:450b20ec296a467077128bff42b73080516e71b56ff59a60a02bef2232c4fa9d \
